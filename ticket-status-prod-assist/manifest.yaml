@@ -1,0 +1,72 @@
+version: "2"
+name: "Sentiment Analysis Handler"
+description: "Snap-In to process sentiment analysis events and take action based on sentiment data."
+
+service_account:
+  display_name: "DevRev Bot"
+
+event_sources:
+  organization:
+    - name: devrev-webhook-org
+      description: "Source listening for sentiment analysis and SLA tracker events."
+      display_name:  DevRev webhook
+      type:  devrev-webhook
+      config:
+        event_types:
+          - conversation_created
+          - conversation_updated
+          - conversation_deleted
+          - work_created
+          - work_deleted
+          - work_fetched
+          - work_updated
+  user:
+    - name: devrev-webhook-user
+      description: "Source listening for sentiment analysis and SLA tracker events."
+      display_name:  DevRev webhook
+      type:  devrev-webhook
+      config:
+        event_types:
+          - conversation_created
+          - conversation_updated
+          - conversation_deleted
+          - work_created
+          - work_deleted
+          - work_fetched
+          - work_updated
+  
+
+functions:
+  - name: handle_sentiment_analysis_event
+    description: "Function to process sentiment analysis events."
+  - name: handle_sla_tracker_event
+    description: "Function to process SLA tracker events."
+  - name: handle_conversation_event
+    description: "Function to process conversation events."
+  - name: handle_event
+    description: "Function to handle the event"
+
+automations:
+  - name: automation-org
+    source: devrev-webhook-org
+    event_types:
+      - conversation_created
+      - conversation_updated
+      - conversation_deleted
+      - work_created
+      - work_deleted
+      - work_fetched
+      - work_updated
+    function: handle_event
+  - name: automation-user
+    source: devrev-webhook-user
+    event_types:
+      - conversation_created
+      - conversation_updated
+      - conversation_deleted
+      - work_created
+      - work_deleted
+      - work_fetched
+      - work_updated
+    function: handle_event
+  
